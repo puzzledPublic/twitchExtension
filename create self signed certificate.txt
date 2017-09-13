@@ -1,0 +1,5 @@
+For windows..
+install openssl for windows
+type "req -x509 -newkey rsa:4096 -nodes -subj "/CN=localhost" -keyout ${name}.key -out ${name}.crt -days 1001"
+${name} is the filename what you want
+you created SSC(self signed certificate) key and crt
