@@ -62,6 +62,30 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+    }), //추가됨 
+    new HtmlWebpackPlugin({
+      filename: config.build.viewer,
+      template: 'viewer.html',
+      inject: true,
+      minify: false,
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      filename: config.build.liveConfig,
+      template: 'live_config.html',
+      inject: true,
+      minify: false,
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      filename: config.build.config,
+      template: 'config.html',
+      inject: true,
+      minify: false,
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
     }),
     // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),

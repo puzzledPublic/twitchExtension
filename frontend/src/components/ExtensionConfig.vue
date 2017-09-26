@@ -6,12 +6,12 @@
 
 <script>
 export default {
-  name: 'extensionConfig',
-  data () {
-      return {
-          msg: 'this is config page'
-      };
-  }
+    name: 'extensionConfig',
+    data() {
+        return {
+            msg: 'This is Config page'
+        };
+    }
 }
 </script>
 

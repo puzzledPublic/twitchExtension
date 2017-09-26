@@ -6,8 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var app = express();
+var fcfs = require('./router/firstComeFirstServed');
 
-app.use(require('connect-history-api-fallback')());
+//app.use(require('connect-history-api-fallback')()); //없는 경로 접근시 기본페이지를 돌려주는 미들웨어
+
 // view engine setup
 //app.set('view engine', 'ejs');
 //app.set('views', path.join(__dirname, 'views'));
@@ -25,8 +27,10 @@ app.use(function(req, res, next){
   res.setHeader('Access-Control-Allow-Origin', '*');
   return next();
 });
+app.use('/ebs', fcfs);
+
 app.get('/:extensionPath', function(req, res, next){
-  res.sendFile(path.join(__dirname,'/public','index.html'));
+    res.sendFile(path.join(__dirname,'/public','index.html'));
 });
 
 // catch 404 and forward to error handler

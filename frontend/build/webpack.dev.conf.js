@@ -30,6 +30,22 @@ module.exports = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true
     }),
+    //추가됨
+    new HtmlWebpackPlugin({
+      filename: 'viewer.html',
+      template: 'viewer.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'live_config.html',
+      template: 'live_config.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'config.html',
+      template: 'config.html',
+      inject: true
+    }),
     new FriendlyErrorsPlugin()
   ]
 })

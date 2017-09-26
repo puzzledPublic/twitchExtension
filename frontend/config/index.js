@@ -4,10 +4,15 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname,'../../backend/public/index.html'), //path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../../backend/public'),//path.resolve(__dirname, '../dist'),
+    index: path.resolve(__dirname, '../dist/index.html'),//path.resolve(__dirname,'../../backend/public/index.html'), //백엔드에 올릴경우
+    //추가됨
+    viewer: path.resolve(__dirname, '../dist/viewer.html'),
+    liveConfig: path.resolve(__dirname, '../dist/liveConfig.html'),
+    config: path.resolve(__dirname, '../dist/config.html'),
+    
+    assetsRoot: path.resolve(__dirname, '../dist'),//path.resolve(__dirname, '../../backend/public'), //백엔드에 올릴경우
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '', //assetsPublicPath: '/', //변경됨
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -27,12 +32,7 @@ module.exports = {
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {/*
-      '/': {
-        target: 'https://localhost:3000/',
-        changeOrigin: true,
-      }*/
-    },
+    proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
