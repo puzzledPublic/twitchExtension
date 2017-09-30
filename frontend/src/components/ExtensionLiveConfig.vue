@@ -24,7 +24,7 @@ export default {
     methods : {
         start : function () {
             var that = this;
-            axios.post('/ebs/fcfs/config',{
+            axios.post('https://localhost:3000/ebs/fcfs/config',{
                 count : this.count,
                 isOpen : true
             }).then(function(response){
@@ -33,7 +33,7 @@ export default {
         },
         terminate : function () {
             var that = this;
-            axios.post('/ebs/fcfs/config',{
+            axios.post('https://localhost:3000/ebs/fcfs/config',{
                 isOpen : false
             }).then(function(response){
                 that.msg = response.data;
@@ -41,7 +41,7 @@ export default {
         },
         result : function () {
             var that = this;
-            axios.get('/ebs/fcfs/result').then(function (response){
+            axios.get('https://localhost:3000/ebs/fcfs/result').then(function (response){
                 that.list = response.data;
             });
         }
