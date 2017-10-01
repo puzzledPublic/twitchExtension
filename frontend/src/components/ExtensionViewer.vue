@@ -46,7 +46,9 @@ export default {
                     window.Twitch.ext.onAuthorized((auth) => {
                         axios.get('https://localhost:3000/ebs/fcfs', {
                             headers: {
-                                'x-extension-jwt': auth.userId
+                                //'x-extension-jwt': auth.userId
+                                'User-Id' : auth.userId,
+                                'Channel-Id' : auth.channelId
                             }
                         }).then((response) => {
                             console.log(response.data);

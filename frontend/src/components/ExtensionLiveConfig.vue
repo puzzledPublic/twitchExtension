@@ -18,31 +18,40 @@ export default {
         return {
             msg: 'This is Live_Config Page',
             count: 0,
-            list: []
+            list: [],
+            channelId : ''
+        }
+    },
+    created() {
+        console.log('created on liveConfig');
+        if(window.Twitch.ext){
+            window.Twitch.ext.onAuthorized((auth)=>{
+                this.channelId = auth.channelId;
+            });
+            
         }
     },
     methods : {
-        start : function () {
-            var that = this;
+        start() {
             axios.post('https://localhost:3000/ebs/fcfs/config',{
                 count : this.count,
-                isOpen : true
-            }).then(function(response){
-                that.msg = response.data;
+                openFlag : true,
+                channelId : this.channelId
+            }).then((response) => {
+                this.msg = response.data;
             });
         },
-        terminate : function () {
-            var that = this;
+        terminate() {
             axios.post('https://localhost:3000/ebs/fcfs/config',{
-                isOpen : false
-            }).then(function(response){
-                that.msg = response.data;
+                openFlag : false,
+                channelId : this.channelId
+            }).then((response) => {
+                this.msg = response.data;
             });
         },
-        result : function () {
-            var that = this;
-            axios.get('https://localhost:3000/ebs/fcfs/result').then(function (response){
-                that.list = response.data;
+        result() {
+            axios.get('https://localhost:3000/ebs/fcfs/result').then((response) => {
+                this.list = response.data;
             });
         }
     }
