@@ -2,7 +2,7 @@
     <div class="viewer">
         <h1>{{msg}}</h1>
         <div class="add">
-            <div class="add-button" @click="addUser" >Click</div>
+            <div class="add-button" @click="addUser" >{{btnMsg}}</div>
         </div>
         <div class="add-outline"></div>
         <!--<extension-viewer-sub></extension-viewer-sub>-->
@@ -19,20 +19,45 @@ export default {
         return {
             msg: 'First Come First Served',
             token : '',
-            isActive : true,
+            isActive : false,
+            btnMsg : 'Waiting',
+            userName : ''
         }
     },
     created() {
         console.log('created');
         if(window.Twitch.ext){
+            //UserId => UserName
+            window.Twitch.ext.onAuthorized((auth) => {
+                let userNumber = auth.userId;
+                if(auth.userId.charAt(0) === 'U'){
+                    userNumber = auth.userId.substr(1)    
+                }
+                axios.get('https://api.twitch.tv/kraken/users/' + userNumber, {
+                    headers: {
+                        'Accept': 'application/vnd.twitchtv.v5+json',
+                        'Client-Id' : 'vzy0hasx7tj8gieonbnpbapr8wfvhb'
+                    }
+                }).then((response)=>{
+                    this.userName = response.data.display_name;
+                    console.log(this.userName);
+                });
+            });
             window.Twitch.ext.listen("broadcast", (target, contentType, message)=>{
                 console.log(message);
                 console.log(typeof message);
                 let con = JSON.parse(message.toString());
-                console.log(typeof con);
+                
+                console.log(con.code);
                 if(con.code === 'success'){
                     console.log('success');
                     this.msg = con.result;
+                }
+                else if(con.code === 'start'){
+                    console.log('start');
+                    this.msg = 'start!!!';
+                    this.btnMsg = 'Click';
+                    this.isActive = true;
                 }
             });
         }
@@ -40,15 +65,16 @@ export default {
     methods: {
         addUser() {
             if(this.isActive){
-                this.msg = "waiting..";
+                this.msg = 'waiting..';
                 this.isActive = false;
+                this.btnMsg = 'disabled';
                 if (window.Twitch.ext) {
                     window.Twitch.ext.onAuthorized((auth) => {
                         axios.get('https://localhost:3000/ebs/fcfs', {
                             headers: {
-                                //'x-extension-jwt': auth.userId
                                 'User-Id' : auth.userId,
-                                'Channel-Id' : auth.channelId
+                                'Channel-Id' : auth.channelId,
+                                'User-Name' : this.userName
                             }
                         }).then((response) => {
                             console.log(response.data);

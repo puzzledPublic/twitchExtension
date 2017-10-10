@@ -5,26 +5,25 @@ var https = require('https');
 var channelItem = require('../models/channelItem');
 
 var array = [];
-//var isOpen = false;
-//var count = 1;
 var secret = new Buffer('MBYztudN9N8Ga/iWMiLICKGsPDfWtPyiZ22xhXmPblE=', 'base64');
 
 router.get('/fcfs', function (req, res, next) {
 
     let UserId = req.header('User-Id');
     let channelId = req.header('Channel-Id')+'';
+    let userName = req.header('User-Name');
     let item = findChannel(channelId);
-    console.log(UserId + ' ' + channelId);
+    console.log(UserId + ' ' + userName + ' ' + channelId);
 
     if(item && item.getOpenFlag()){
-        if(!item.list.includes(UserId)){
-            item.list.push(UserId);
+        if(!item.list.includes(userName)){
+            item.list.push(userName);
             console.log(item);
             if(item.isFull()){
                 console.log('send to pubsub');
                 item.setOpenFlag(false);
                 let fcfsList = JSON.stringify(item.getFcfsList());
-                sendListToPubSub(channelId, fcfsList);
+                sendListToPubSub(channelId, 'success', fcfsList);
             }
         }
         res.json({data : 'added in array'});
@@ -46,6 +45,8 @@ router.post('/fcfs/config', function (req, res, next) {
             item.initList();
             item.setCount(count);
             item.setOpenFlag(openFlag);
+            //send start msg to pubsub
+            sendListToPubSub(channelId, 'start');
             console.log('array opened');
         }
         else{
@@ -55,31 +56,11 @@ router.post('/fcfs/config', function (req, res, next) {
     }
     else{
         array.push(new channelItem(channelId, openFlag, count));
+        sendListToPubSub(channelId, 'start');
     }
     console.log(array);
     res.json({data : 'config is completed'});
-    //let token = req.header('x-extension-jwt');
-    //let decoded = jwt.decode(token);
-    //if (decoded.role === 'broadcaster') {
-        /*
-    if (req.body.isOpen) {
-        array = [];
-        count = req.body.count;
-        isOpen = req.body.isOpen;
-        console.log('array opened');
-    } else {
-        isOpen = req.body.isOpen;
-        console.log('array closed');
-    }
-    //}
-    res.json({
-        data: 'config is completed'
-    })*/
-});
-router.get('/fcfs/result', function (req, res, next) {
-    res.json({
-        data: array.slice(0, count)
-    });
+    
 });
 
 function findChannel(channelId){
@@ -91,10 +72,13 @@ function findChannel(channelId){
     return null;
 }
 
-function sendListToPubSub(channelId, fcfsList){
+function sendListToPubSub(channelId, code, fcfsList){
+    if(!fcfsList){
+        fcfsList = '\"none\"';
+    }
     let post_data = JSON.stringify({
         content_type : 'application/json',
-        message : '{\"code\" : \"success\", \"result\" : ' + fcfsList + '}',
+        message : '{\"code\" : \"' + code + '\", \"result\" : ' + fcfsList + '}',
         targets : ['broadcast']
     });
     let token = getToken(channelId);

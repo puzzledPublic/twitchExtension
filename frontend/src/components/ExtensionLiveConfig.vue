@@ -4,7 +4,6 @@
         <input type="text" v-model="count"/> 
         <button @click="start">시작</button>
         <button @click="terminate">취소</button>
-        <button @click="result">결과</button>
         <p v-for="item in list" :key="item">{{item}}</p>
     </div>
 </template>
@@ -28,7 +27,16 @@ export default {
             window.Twitch.ext.onAuthorized((auth)=>{
                 this.channelId = auth.channelId;
             });
-            
+            window.Twitch.ext.listen("broadcast", (target, contentType, message)=>{
+                console.log(message);
+                console.log(typeof message);
+                let con = JSON.parse(message.toString());
+                console.log(typeof con);
+                if(con.code === 'success'){
+                    console.log('success');
+                    this.msg = con.result;
+                }
+            });
         }
     },
     methods : {
@@ -47,11 +55,6 @@ export default {
                 channelId : this.channelId
             }).then((response) => {
                 this.msg = response.data;
-            });
-        },
-        result() {
-            axios.get('https://localhost:3000/ebs/fcfs/result').then((response) => {
-                this.list = response.data;
             });
         }
     }
