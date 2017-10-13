@@ -17,7 +17,7 @@ export default {
     name: 'extensionViewer',
     data() {
         return {
-            msg: 'First Come First Served',
+            msg: 'Who want to play?',
             token : '',
             isActive : false,
             btnMsg : 'Waiting',
@@ -44,14 +44,17 @@ export default {
                 });
             });
             window.Twitch.ext.listen("broadcast", (target, contentType, message)=>{
-                console.log(message);
-                console.log(typeof message);
                 let con = JSON.parse(message.toString());
                 
                 console.log(con.code);
                 if(con.code === 'success'){
                     console.log('success');
-                    this.msg = con.result;
+                    //this.msg = con.result;
+                    this.msg = 'Result';
+                    for(const i in con.result){
+                        this.msg = this.msg.concat('\n' + i + '. '+ con.result[i]);
+                    }
+                    
                 }
                 else if(con.code === 'start'){
                     console.log('start');
@@ -70,7 +73,7 @@ export default {
                 this.btnMsg = 'disabled';
                 if (window.Twitch.ext) {
                     window.Twitch.ext.onAuthorized((auth) => {
-                        axios.get('https://localhost:3000/ebs/fcfs', {
+                        axios.get(`https://${process.env.HOSTNAME}:3000/ebs/fcfs`, {
                             headers: {
                                 'User-Id' : auth.userId,
                                 'Channel-Id' : auth.channelId,

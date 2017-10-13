@@ -9,7 +9,6 @@ module.exports = {
     viewer: path.resolve(__dirname, '../dist/viewer.html'),
     liveConfig: path.resolve(__dirname, '../dist/liveConfig.html'),
     config: path.resolve(__dirname, '../dist/config.html'),
-    
     assetsRoot: path.resolve(__dirname, '../dist'),//path.resolve(__dirname, '../../backend/public'), //백엔드에 올릴경우
     assetsSubDirectory: 'static',
     assetsPublicPath: '', //assetsPublicPath: '/', //변경됨

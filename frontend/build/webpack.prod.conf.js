@@ -72,7 +72,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: config.build.liveConfig,
+      filename: config.build.live_config,
       template: 'live_config.html',
       inject: true,
       minify: false,

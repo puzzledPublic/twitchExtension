@@ -1,10 +1,11 @@
 <template>
     <div class="liveconfig">
         <p>{{msg}}</p>
-        <input type="text" v-model="count"/> 
-        <button @click="start">시작</button>
-        <button @click="terminate">취소</button>
-        <p v-for="item in list" :key="item">{{item}}</p>
+        <input type="text" v-model="count"/><br>
+        <button @click="start">Start</button>
+        <button @click="terminate">Cancel</button>
+        <p>{{msg2}}</p>
+        <p v-for="(list, index) in lists" :key="list">{{index+1}}.{{list}}</p>
     </div>
 </template>
 
@@ -15,9 +16,10 @@ export default {
     name: 'extensionLiveConfig',
     data() {
         return {
-            msg: 'This is Live_Config Page',
+            msg: 'Input the number of people',
+            msg2: '',
             count: 0,
-            list: [],
+            lists: '',
             channelId : ''
         }
     },
@@ -28,35 +30,41 @@ export default {
                 this.channelId = auth.channelId;
             });
             window.Twitch.ext.listen("broadcast", (target, contentType, message)=>{
-                console.log(message);
-                console.log(typeof message);
                 let con = JSON.parse(message.toString());
-                console.log(typeof con);
+                //console.log(message);
                 if(con.code === 'success'){
                     console.log('success');
-                    this.msg = con.result;
+                    this.msg2 = 'Result';
+                    this.lists = con.result;
                 }
             });
         }
     },
     methods : {
         start() {
-            axios.post('https://localhost:3000/ebs/fcfs/config',{
+            if(this.count < 1 || this.count >30){
+                this.msg2 = 'At least 1';
+                return;
+            }
+            axios.post(`https://${process.env.HOSTNAME}:3000/ebs/fcfs/config`,{
                 count : this.count,
                 openFlag : true,
                 channelId : this.channelId
             }).then((response) => {
-                this.msg = response.data;
+                this.msg2 = response.data.data;
             });
         },
         terminate() {
-            axios.post('https://localhost:3000/ebs/fcfs/config',{
+            axios.post(`https://${process.env.HOSTNAME}:3000/ebs/fcfs/config`,{
                 openFlag : false,
                 channelId : this.channelId
             }).then((response) => {
-                this.msg = response.data;
+                this.msg2 = response.data.data;
             });
         }
     }
 }
 </script>
+<style scoped>
+
+</style>

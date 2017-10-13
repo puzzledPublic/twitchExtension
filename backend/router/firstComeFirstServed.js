@@ -39,7 +39,7 @@ router.post('/fcfs/config', function (req, res, next) {
     let openFlag = req.body.openFlag;
     let count = req.body.count;
     let item = findChannel(channelId);
-
+    let code = 'opend';
     if(item){
         if(openFlag){
             item.initList();
@@ -51,6 +51,7 @@ router.post('/fcfs/config', function (req, res, next) {
         }
         else{
             item.setOpenFlag(openFlag);
+            code = 'closed';
             console.log('array closed');
         }
     }
@@ -59,7 +60,7 @@ router.post('/fcfs/config', function (req, res, next) {
         sendListToPubSub(channelId, 'start');
     }
     console.log(array);
-    res.json({data : 'config is completed'});
+    res.json({data : code});
     
 });
 
