@@ -9,23 +9,34 @@ var debug = require('debug')('TwitchExtension:server');
 var https = require('https');
 var fs = require('fs');
 
+
 var options = {
   'key' : fs.readFileSync('../cert/testing.key'),
   'cert' : fs.readFileSync('../cert/testing.crt')
 }
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '443');
 app.set('port', port);
+
+/*
+require('greenlock-express').create({
+  server: 'https://acme-v01.api.letsencrypt.org/directory',
+  email: 'puzzledPublic@gmail.com',
+  agreeTos: true,
+  approveDomains: [ 'whowant.ml', 'www.whowant.ml' ],
+  app : app
+}).listen(80,443);
+*/
 
 /**
  * Create HTTPs server.
  */
 
 var server = https.createServer(options, app);
-
 /**
  * Listen on provided port, on all network interfaces.
  */

@@ -4,7 +4,9 @@
         <div class="add">
             <div class="add-button" @click="addUser" >{{btnMsg}}</div>
         </div>
-        <div class="add-outline"></div>
+        <div class="list">
+            <p v-for="(list, index) in lists" :key="list">{{index+1}}. {{list}}</p>
+        </div>
         <!--<extension-viewer-sub></extension-viewer-sub>-->
     </div>
 </template>
@@ -21,7 +23,8 @@ export default {
             token : '',
             isActive : false,
             btnMsg : 'Waiting',
-            userName : ''
+            userName : '',
+            lists: []
         }
     },
     created() {
@@ -48,17 +51,14 @@ export default {
                 
                 console.log(con.code);
                 if(con.code === 'success'){
-                    console.log('success');
-                    //this.msg = con.result;
+                    document.getElementsByClassName('add-button')[0].style.display = 'none';
                     this.msg = 'Result';
-                    for(const i in con.result){
-                        this.msg = this.msg.concat('\n' + i + '. '+ con.result[i]);
-                    }
+                    this.lists = con.result;
                     
                 }
                 else if(con.code === 'start'){
-                    console.log('start');
                     this.msg = 'start!!!';
+                    document.getElementsByClassName('add-button')[0].style.display = 'block';
                     this.btnMsg = 'Click';
                     this.isActive = true;
                 }
@@ -73,7 +73,7 @@ export default {
                 this.btnMsg = 'disabled';
                 if (window.Twitch.ext) {
                     window.Twitch.ext.onAuthorized((auth) => {
-                        axios.get(`https://${process.env.HOSTNAME}:3000/ebs/fcfs`, {
+                        axios.get(`https://${process.env.HOSTNAME}/ebs/fcfs`, {
                             headers: {
                                 'User-Id' : auth.userId,
                                 'Channel-Id' : auth.channelId,
@@ -91,6 +91,7 @@ export default {
                 this.msg = "waiting..";
                 this.isActive = false;
             }
+            event.target.
             console.log('clicked');
         }
     },

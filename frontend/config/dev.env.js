@@ -3,5 +3,5 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  HOSTNAME: '"localhost"' 
+  HOSTNAME: '"whowant.ml"' 
 })

@@ -7,9 +7,9 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),//path.resolve(__dirname,'../../backend/public/index.html'), //백엔드에 올릴경우
     //추가됨
     viewer: path.resolve(__dirname, '../dist/viewer.html'),
-    liveConfig: path.resolve(__dirname, '../dist/liveConfig.html'),
+    liveConfig: path.resolve(__dirname, '../dist/live_config.html'),
     config: path.resolve(__dirname, '../dist/config.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),//path.resolve(__dirname, '../../backend/public'), //백엔드에 올릴경우
+    assetsRoot: path.resolve(__dirname, '../dist'), //path.resolve(__dirname, '../../backend/public'), //백엔드에 올릴경우
     assetsSubDirectory: 'static',
     assetsPublicPath: '', //assetsPublicPath: '/', //변경됨
     productionSourceMap: true,

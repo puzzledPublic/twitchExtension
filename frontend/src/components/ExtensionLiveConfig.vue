@@ -5,7 +5,9 @@
         <button @click="start">Start</button>
         <button @click="terminate">Cancel</button>
         <p>{{msg2}}</p>
-        <p v-for="(list, index) in lists" :key="list">{{index+1}}.{{list}}</p>
+        <div class="list">
+            <p v-for="(list, index) in lists" :key="list">{{index+1}}. {{list}}</p>
+        </div>
     </div>
 </template>
 
@@ -46,7 +48,7 @@ export default {
                 this.msg2 = 'At least 1';
                 return;
             }
-            axios.post(`https://${process.env.HOSTNAME}:3000/ebs/fcfs/config`,{
+            axios.post(`https://${process.env.HOSTNAME}/ebs/fcfs/config`,{
                 count : this.count,
                 openFlag : true,
                 channelId : this.channelId
@@ -55,7 +57,7 @@ export default {
             });
         },
         terminate() {
-            axios.post(`https://${process.env.HOSTNAME}:3000/ebs/fcfs/config`,{
+            axios.post(`https://${process.env.HOSTNAME}/ebs/fcfs/config`,{
                 openFlag : false,
                 channelId : this.channelId
             }).then((response) => {
@@ -65,6 +67,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-
-</style>
